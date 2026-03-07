@@ -1,43 +1,107 @@
-import heroImage from './assets/Red Main Promo 26.jpg'
-import promoImage from './assets/Red Promo 2 26.jpg'
-import liveImageOne from './assets/HOUSEMATES 12.2.26 (39 of 40).jpg'
-import liveImageTwo from './assets/HOUSEMATES 12.2.26 (40 of 40).jpg'
-import portraitImageOne from './assets/19-AFA10A29-D9A2-4F27-9C0F-8D150FE10A16.jpg'
-import portraitImageTwo from './assets/25-CC87B812-9F03-4509-B122-C71D1E922903.jpg'
+import { useEffect, useRef } from 'react'
+import heroImage from '../public/assets/IMG_6089.JPG'
+import promoImage from '../public/assets/IMG_6073.JPG'
+import liveImageOne from '../public/assets/IMG_5951.JPG'
+import liveImageTwo from '../public/assets/IMG_5889.JPG'
+import portraitImageOne from '../public/assets/6a861b31-0fb3-4dd8-b04a-0a049a4009e6.JPG'
+import portraitImageTwo from '../public/assets/40b9377d-6d77-440e-8a00-30b0e9886a14.JPG'
+import heroVideo from '../public/assets/calvideo.mp4'
 
-const bandcampUrl = 'https://housematesband.bandcamp.com/'
-const instagramUrl = 'https://instagram.com/housematesband'
-const spotifyUrl = 'https://open.spotify.com/artist/64JQlmkAPwR6IRgsEQ42Tb'
-const youtubeUrl = 'https://youtube.com/@housematesband'
-const pressKitUrl = 'https://new.express.adobe.com/webpage/jI1tmCDu3FqiE'
-const unreleasedUrl = 'https://samply.app/p/Gt0u7VRKr69cpVPLhOFx'
+const bandcampUrl = 'https://monotypes.bandcamp.com/'
+const instagramUrl = 'https://instagram.com/monotypesworld96'
+const spotifyUrl = 'https://open.spotify.com/artist/1eiXeaeF8NsBtJDqqtAO5p'
+const youtubeUrl = 'https://www.youtube.com/@monotypesworld96'
+
 
 
 export default function App() {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    let rafId = 0
+    let targetTime = 0
+    let displayedTime = 0
+
+    const updateTargetFromScroll = () => {
+      if (!videoRef.current) return
+
+      const scrollTop = window.scrollY
+      const docHeight = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        1,
+      )
+      const scrollPercent = Math.min(Math.max(scrollTop / docHeight, 0), 1)
+      const duration = videoRef.current.duration || 0
+
+      if (duration > 0) {
+        targetTime = scrollPercent * duration
+      }
+    }
+
+    const tick = () => {
+      const video = videoRef.current
+
+      if (video) {
+        displayedTime += (targetTime - displayedTime) * 0.12
+
+        if (Math.abs(video.currentTime - displayedTime) > 0.02) {
+          video.currentTime = displayedTime
+        }
+      }
+
+      rafId = window.requestAnimationFrame(tick)
+    }
+
+    const handleLoadedMetadata = () => {
+      updateTargetFromScroll()
+      displayedTime = targetTime
+    }
+
+    const video = videoRef.current
+    video?.addEventListener('loadedmetadata', handleLoadedMetadata)
+    window.addEventListener('scroll', updateTargetFromScroll, { passive: true })
+    window.addEventListener('resize', updateTargetFromScroll)
+
+    updateTargetFromScroll()
+    rafId = window.requestAnimationFrame(tick)
+
+    return () => {
+      window.cancelAnimationFrame(rafId)
+      video?.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      window.removeEventListener('scroll', updateTargetFromScroll)
+      window.removeEventListener('resize', updateTargetFromScroll)
+    }
+  }, [])
+
   return (
     <div className="page">
+      <div className="parallax-video-bg">
+        <video
+          ref={videoRef}
+          src={heroVideo}
+          muted
+          playsInline
+          preload="auto"
+        />
+      </div>
       <header
         className="hero"
         id="home"
-        style={{ '--hero-bg': `url("${liveImageTwo}")` }}
       >
         <nav className="nav">
-          <div className="logo">Housemates</div>
+          <div className="logo">monotypes.</div>
           <div className="nav-links">
             <a href="#about">Social</a>
             <a href="#music">Music</a>
-            <a href="#gigs">Gigs</a>
-            <a href="#press-kit">Press Kit</a>
             <a href={bandcampUrl} target="_blank" rel="noopener noreferrer">Merch</a>
           </div>
         </nav>
 
         <div className="hero-content">
           <div className="hero-text">
-            <p className="eyebrow">post-grunge • alt-rock</p>
-            <h1>HOUSEMATES</h1>
+            <h1>monotypes.</h1>
             <p className="lead">
-              Forming in 2023 HOUSEMATES exploded onto the Galway DIY scene with a raw, unapologetic sound that cuts the listener to the bone. The post-grunge powerhouse packs attitude & grit while simultaneously leaving a lasting impression. Having caught the attention of longtime alt-rockers Fangclub, the band opened up for them in the Róisín Dubh in April 2025. Combining trashy guitars, driving bass & attacking drums they blend melodic intensity with raw aggression, creating a unique fusion of chaos and control. The group come into their own in the live realm. With a stage show known for it's seismic energy & early 90s undertones, HOUSEMATES turn even the smallest of venues into rocking fun houses every time.
+              An alternative rock, post-hardcore outfit based in Galway, known for their high-energy performances and "unhinged" stage presence.
             </p>
             <div className="cta-group">
              
@@ -49,7 +113,7 @@ export default function App() {
             <img
               className="hero-image"
               src={promoImage}
-              alt="Housemates promo"
+              alt="monotypes. promo"
               loading="lazy"
             />
           </div>
@@ -58,7 +122,7 @@ export default function App() {
           <div className="hero-card">
             <div className="hero-card-inner">
               <p className="card-title">Latest Release</p>
-              <h2>“Cutting Teeth?”</h2>
+              <h2>re:up!</h2>
               <p className="card-copy">
                 Streaming everywhere.
               </p>
@@ -71,7 +135,7 @@ export default function App() {
             <div className="hero-card-inner">
               <h2>Merch</h2>
               <p className="card-copy">
-                T-Shirts, Posters, Pins & Stickers available.
+                fr
               </p>
               <a className="button primary" href={bandcampUrl} target="_blank" rel="noopener noreferrer">
                 Shop Now
@@ -84,7 +148,7 @@ export default function App() {
         <section className="section about" id="about">
           <div className="section-header">
             <p className="eyebrow">Social</p>
-            <h2>Follow HOUSEMATES</h2>
+            <h2>Follow monotypes.</h2>
           </div>
           <div className="social-section">
             <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="social-card">
@@ -101,9 +165,9 @@ export default function App() {
             </a>
           </div>
 
-          <a href="mailto:housematesmgmt1@gmail.com" className="email-contact">
+          <a href="mailto:monotypes@gmail.com" className="email-contact">
             <h3>Contact Us Via Email</h3>
-            <p>housematesmgmt1@gmail.com </p>
+            <p>monotypesworld@gmail.com </p>
           </a>
         </section>
 
@@ -113,11 +177,11 @@ export default function App() {
           </div>
           <div className="photo-grid">
             {[
-              { src: promoImage, alt: 'Housemates promo two' },
-              { src: liveImageOne, alt: 'Housemates live performance' },
-              { src: liveImageTwo, alt: 'Housemates live performance two' },
-              { src: portraitImageOne, alt: 'Housemates portrait' },
-              { src: portraitImageTwo, alt: 'Housemates portrait two' },
+              { src: promoImage, alt: 'monotypes. promo two' },
+              { src: liveImageOne, alt: 'monotypes. live performance' },
+              { src: liveImageTwo, alt: 'monotypes. live performance two' },
+              { src: portraitImageOne, alt: 'monotypes. portrait' },
+              { src: portraitImageTwo, alt: 'monotypes. portrait two' },
             ].map((photo) => (
               <figure className="photo-card" key={photo.src}>
                 <img src={photo.src} alt={photo.alt} loading="lazy" />
@@ -135,8 +199,8 @@ export default function App() {
             <iframe
               width="100%"
               height="500"
-              src="https://www.youtube.com/embed/ZXaZ32W7gUs"
-              title="HOUSEMATES - YouTube Video"
+              src="https://www.youtube.com/embed/_GhlJt7yl0o"
+              title="monotypes. - YouTube Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -146,11 +210,7 @@ export default function App() {
           <div className="music-grid">
             {[
               {
-                title: 'Boys Who Like Neitzche',
-                year: '2026',
-              },
-              {
-                title: 'Drama Queens',
+                title: 're:up!',
                 year: '2026',
               },
 
@@ -168,13 +228,10 @@ export default function App() {
             <a className="button primary" href={spotifyUrl}>
               Stream on Spotify
             </a>
-            <a className="button ghost" href={unreleasedUrl}>
-              Unreleased Music
-            </a>
           </div>
         </section>
 
-        <section className="section gigs" id="gigs">
+        {/*<section className="section gigs" id="gigs">
           <div className="section-header">
             <p className="eyebrow">Live</p>
             <h2>Upcoming Gigs</h2>
@@ -212,29 +269,17 @@ export default function App() {
               </a>
             ))}
           </div>
-          <a href="mailto:housematesmgmt1@gmail.com" className="button ghost gigs-contact">
-            Book HOUSEMATES
+          <a href="mailto:monotypesworld@gmail.com" className="button ghost gigs-contact">
+            Book monotypes.
           </a>
         </section>
-
-        <section className="section press" id="press-kit">
-          <div className="section-header">
-            <h2>Press Kit</h2>
-          </div>
-          <div className="press-embed">
-            <iframe
-              title="Housemates Press Kit"
-              src={pressKitUrl}
-              loading="lazy"
-              allow="fullscreen"
-            />
-          </div>
-        </section>
+        */}
+        
       </main>
 
       <footer className="footer">
         <div>
-          <p>© 2026 HOUSEMATES. All rights reserved.</p>
+          <p>© 2026 monotypes. All rights reserved.</p>
           <div className="social-links">
             <a href={instagramUrl} target="_blank" rel="noopener noreferrer" title="Instagram">
               IG

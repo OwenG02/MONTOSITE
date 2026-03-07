@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Mawns Handwriting', 'Inter', 'Space Grotesk', system-ui, sans-serif;
+  font-family: 'Monotype', 'Inter', 'Space Grotesk', system-ui, sans-serif;
   line-height: 1.6;
   font-weight: 400;
   color: #ff0000;
@@ -11,8 +11,8 @@
 }
 
 @font-face {
-  font-family: 'Mawns Handwriting';
-  src: url('/src/assets/Mawns_Handwriting.ttf') format('truetype');
+  font-family: 'Monotype';
+  src: url('/assets/Monotypefont-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -28,7 +28,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #000000;
+  background: transparent;
 }
 
 a {
@@ -45,9 +45,12 @@ img {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
+  background: transparent;
 }
 
 .nav {
+  font-family: 'Monotype';
   position: sticky;
   top: 0;
   z-index: 10;
@@ -61,7 +64,8 @@ img {
 }
 
 .logo {
-  font-size: 1.2rem;
+  font-family: 'Monotype';
+  font-size: 2.5rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -70,7 +74,7 @@ img {
 .nav-links {
   display: flex;
   gap: 20px;
-  font-size: 0.95rem;
+  font-size: 1.35rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -85,14 +89,38 @@ img {
   border-color: #ff0000;
 }
 
+.parallax-video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.parallax-video-bg video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate3d(-50%, -50%, 0);
+  object-fit: cover;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 .hero {
   padding: 20px 8vw 80px;
   position: relative;
   isolation: isolate;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.45)),
-    var(--hero-bg);
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+  min-height: 100vh;
+  z-index: 1;
 }
 
 .hero::after {

@@ -1,11 +1,24 @@
 import { useEffect, useRef } from 'react'
-import heroImage from '../public/assets/IMG_6089.JPG'
-import promoImage from '../public/assets/IMG_6073.JPG'
-import liveImageOne from '../public/assets/IMG_5951.JPG'
-import liveImageTwo from '../public/assets/IMG_5889.JPG'
-import portraitImageOne from '../public/assets/6a861b31-0fb3-4dd8-b04a-0a049a4009e6.JPG'
-import portraitImageTwo from '../public/assets/40b9377d-6d77-440e-8a00-30b0e9886a14.JPG'
-import heroVideo from '../public/assets/calvideo.mp4'
+
+const heroImage = '/assets/IMG_6089.JPG'
+const heroVideo = '/assets/calvideobw.mp4'
+
+const bandPhotos = Object.entries(
+  import.meta.glob('./assets/bandpics/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP,avif,AVIF}', {
+    eager: true,
+    import: 'default',
+  }),
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, src]) => {
+    const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') ?? 'band photo'
+    const normalizedName = fileName.replace(/[-_]+/g, ' ').trim()
+
+    return {
+      src,
+      alt: `monotypes. ${normalizedName}`,
+    }
+  })
 
 const bandcampUrl = 'https://monotypes.bandcamp.com/'
 const instagramUrl = 'https://instagram.com/monotypesworld96'
@@ -176,13 +189,7 @@ export default function App() {
             <h2>Photos</h2>
           </div>
           <div className="photo-grid">
-            {[
-              { src: promoImage, alt: 'monotypes. promo two' },
-              { src: liveImageOne, alt: 'monotypes. live performance' },
-              { src: liveImageTwo, alt: 'monotypes. live performance two' },
-              { src: portraitImageOne, alt: 'monotypes. portrait' },
-              { src: portraitImageTwo, alt: 'monotypes. portrait two' },
-            ].map((photo) => (
+            {bandPhotos.map((photo) => (
               <figure className="photo-card" key={photo.src}>
                 <img src={photo.src} alt={photo.alt} loading="lazy" />
               </figure>

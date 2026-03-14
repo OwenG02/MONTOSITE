@@ -12,7 +12,6 @@ const youtubeUrl = 'https://www.youtube.com/@monotypesworld96'
 
 export default function App() {
   const videoRef = useRef(null)
-  const [videoFailed, setVideoFailed] = useState(false)
   const [bandPhotos, setBandPhotos] = useState([])
 
   useEffect(() => {
@@ -92,18 +91,8 @@ export default function App() {
       displayedTime = targetTime
     }
 
-    const handleVideoError = () => {
-      setVideoFailed(true)
-    }
-
-    const handleVideoCanPlay = () => {
-      setVideoFailed(false)
-    }
-
     const video = videoRef.current
     video?.addEventListener('loadedmetadata', handleLoadedMetadata)
-    video?.addEventListener('error', handleVideoError)
-    video?.addEventListener('canplay', handleVideoCanPlay)
     window.addEventListener('scroll', updateTargetFromScroll, { passive: true })
     window.addEventListener('resize', updateTargetFromScroll)
 
@@ -113,8 +102,6 @@ export default function App() {
     return () => {
       window.cancelAnimationFrame(rafId)
       video?.removeEventListener('loadedmetadata', handleLoadedMetadata)
-      video?.removeEventListener('error', handleVideoError)
-      video?.removeEventListener('canplay', handleVideoCanPlay)
       window.removeEventListener('scroll', updateTargetFromScroll)
       window.removeEventListener('resize', updateTargetFromScroll)
     }
@@ -123,22 +110,13 @@ export default function App() {
   return (
     <div className="page">
       <div className="parallax-video-bg">
-        {!videoFailed ? (
-          <video
-            ref={videoRef}
-            src={heroVideo}
-            muted
-            playsInline
-            preload="auto"
-          />
-        ) : (
-          <img
-            className="parallax-gif-fallback"
-            src="/assets/logospingif.GIF"
-            alt=""
-            aria-hidden="true"
-          />
-        )}
+        <video
+          ref={videoRef}
+          src={heroVideo}
+          muted
+          playsInline
+          preload="auto"
+        />
       </div>
       <header
         className="hero"

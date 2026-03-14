@@ -218,8 +218,8 @@ export default function App() {
             <h2>Photos</h2>
           </div>
           <div className="photo-grid">
-            {bandPhotos.map((photo, index) => (
-              <figure className={`photo-card collage-${index % 8}`} key={photo.src}>
+            {bandPhotos.map((photo) => (
+              <figure className="photo-card" key={photo.src}>
                 <img src={photo.src} alt={photo.alt} loading="lazy" />
               </figure>
             ))}

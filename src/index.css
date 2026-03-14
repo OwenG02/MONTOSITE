@@ -551,11 +551,8 @@ img {
 
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-auto-rows: 36px;
-  grid-auto-flow: dense;
-  gap: 14px;
-  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
 }
 
 .photo-card {
@@ -565,12 +562,6 @@ img {
   border: 2px solid rgba(255, 0, 0, 0.3);
   background: rgba(255, 0, 0, 0.06);
   box-shadow: 8px 8px 0 rgba(255, 0, 0, 0.1);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.photo-card:hover {
-  transform: translate(-3px, -3px) rotate(0deg) !important;
-  box-shadow: 12px 12px 0 rgba(255, 0, 0, 0.16);
 }
 
 .photo-card img {
@@ -580,54 +571,6 @@ img {
   object-fit: cover;
   filter: contrast(1.18) saturate(0.88);
   transform: scale(1.01);
-}
-
-.collage-0 {
-  grid-column: span 4;
-  grid-row: span 9;
-  transform: rotate(-3deg) translateY(8px);
-}
-
-.collage-1 {
-  grid-column: span 3;
-  grid-row: span 7;
-  transform: rotate(2.8deg) translateY(-10px);
-}
-
-.collage-2 {
-  grid-column: span 5;
-  grid-row: span 8;
-  transform: rotate(-1.6deg) translateX(-6px);
-}
-
-.collage-3 {
-  grid-column: span 4;
-  grid-row: span 10;
-  transform: rotate(3.5deg) translateY(-4px);
-}
-
-.collage-4 {
-  grid-column: span 3;
-  grid-row: span 8;
-  transform: rotate(-2.4deg) translateY(6px);
-}
-
-.collage-5 {
-  grid-column: span 5;
-  grid-row: span 9;
-  transform: rotate(1.2deg) translateX(4px);
-}
-
-.collage-6 {
-  grid-column: span 4;
-  grid-row: span 7;
-  transform: rotate(-3.2deg) translateY(-8px);
-}
-
-.collage-7 {
-  grid-column: span 3;
-  grid-row: span 9;
-  transform: rotate(2deg) translateY(5px);
 }
 
 .press-embed {
@@ -714,32 +657,6 @@ img {
     justify-content: center;
     flex-wrap: wrap;
     gap: 12px;
-  }
-
-  .photo-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: 32px;
-    gap: 10px;
-  }
-
-  .photo-card {
-    transform: none !important;
-  }
-
-  .collage-0,
-  .collage-2,
-  .collage-3,
-  .collage-5 {
-    grid-column: span 6;
-    grid-row: span 8;
-  }
-
-  .collage-1,
-  .collage-4,
-  .collage-6,
-  .collage-7 {
-    grid-column: span 3;
-    grid-row: span 7;
   }
 
   .hero {

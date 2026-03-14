@@ -168,7 +168,8 @@ img {
   pointer-events: none;
 }
 
-.parallax-video-bg video {
+.parallax-video-bg video,
+.parallax-gif-fallback {
   position: absolute;
   top: 50%;
   left: 50%;

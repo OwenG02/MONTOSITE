@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate:bandphotos-manifest": "node scripts/generate-bandphotos-manifest.mjs",
+    "predev": "npm run generate:bandphotos-manifest",
+    "prebuild": "npm run generate:bandphotos-manifest",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "omggif": "^1.0.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

@@ -1,24 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const heroImage = '/assets/IMG_6089.JPG'
 const heroVideo = '/assets/calvideobw.mp4'
-
-const bandPhotos = Object.entries(
-  import.meta.glob('./assets/bandpics/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP,avif,AVIF}', {
-    eager: true,
-    import: 'default',
-  }),
-)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([path, src]) => {
-    const fileName = path.split('/').pop()?.replace(/\.[^/.]+$/, '') ?? 'band photo'
-    const normalizedName = fileName.replace(/[-_]+/g, ' ').trim()
-
-    return {
-      src,
-      alt: `monotypes. ${normalizedName}`,
-    }
-  })
 
 const bandcampUrl = 'https://monotypes.bandcamp.com/'
 const instagramUrl = 'https://instagram.com/monotypesworld96'
@@ -29,6 +12,44 @@ const youtubeUrl = 'https://www.youtube.com/@monotypesworld96'
 
 export default function App() {
   const videoRef = useRef(null)
+  const [bandPhotos, setBandPhotos] = useState([])
+
+  useEffect(() => {
+    let isCancelled = false
+
+    const loadBandPhotos = async () => {
+      try {
+        const response = await fetch('/assets/bandphotos/manifest.json', { cache: 'no-store' })
+        if (!response.ok) throw new Error(`Could not load manifest: ${response.status}`)
+
+        const fileNames = await response.json()
+        if (!Array.isArray(fileNames)) throw new Error('Invalid band photo manifest format')
+
+        const photos = fileNames
+          .filter((fileName) => typeof fileName === 'string')
+          .sort((a, b) => a.localeCompare(b))
+          .map((fileName) => {
+            const normalizedName = fileName.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').trim()
+
+            return {
+              src: `/assets/bandphotos/${fileName}`,
+              alt: `monotypes. ${normalizedName}`,
+            }
+          })
+
+        if (!isCancelled) setBandPhotos(photos)
+      } catch (error) {
+        console.error('Failed to load band photos from manifest.', error)
+        if (!isCancelled) setBandPhotos([])
+      }
+    }
+
+    loadBandPhotos()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     let rafId = 0
@@ -101,12 +122,20 @@ export default function App() {
         className="hero"
         id="home"
       >
+        <div className="hero-brand">
+          <div className="logo">
+            <img src="/assets/charicature.png" alt="monotypes. caricature" className="nav-charicature" />
+            monotypes world.
+          </div>
+        </div>
+
         <nav className="nav">
-          <div className="logo">monotypes.</div>
-          <div className="nav-links">
-            <a href="#about">Social</a>
-            <a href="#music">Music</a>
-            <a href={bandcampUrl} target="_blank" rel="noopener noreferrer">Merch</a>
+          <div className="nav-links-row">
+            <div className="nav-links">
+              <a href="#about">Social</a>
+              <a href="#music">Music</a>
+              <a href={bandcampUrl} target="_blank" rel="noopener noreferrer">Merch</a>
+            </div>
           </div>
         </nav>
 
@@ -139,7 +168,7 @@ export default function App() {
               <p className="card-copy">
                 Streaming everywhere.
               </p>
-               <a className="button primary" href="#music">
+              <a className="button primary" href={spotifyUrl} target="_blank" rel="noopener noreferrer">
                 Listen Now
               </a>
             </div>
@@ -189,8 +218,8 @@ export default function App() {
             <h2>Photos</h2>
           </div>
           <div className="photo-grid">
-            {bandPhotos.map((photo) => (
-              <figure className="photo-card" key={photo.src}>
+            {bandPhotos.map((photo, index) => (
+              <figure className={`photo-card collage-${index % 8}`} key={photo.src}>
                 <img src={photo.src} alt={photo.alt} loading="lazy" />
               </figure>
             ))}
